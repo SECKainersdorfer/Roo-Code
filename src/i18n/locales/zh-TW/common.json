@@ -59,7 +59,12 @@
 		"condense_not_enough_messages": "沒有足夠的訊息來壓縮上下文",
 		"condensed_recently": "上下文最近已壓縮；跳過此次嘗試",
 		"condense_handler_invalid": "壓縮上下文的 API 處理程式無效",
-		"condense_context_grew": "壓縮過程中上下文大小增加；跳過此次嘗試"
+		"condense_context_grew": "壓縮過程中上下文大小增加；跳過此次嘗試",
+		"diff_editor_timeout": "等待差異編輯器開啟逾時",
+		"user_closed_editor": "你關閉了文字編輯器，無法編輯檔案",
+		"failed_apply_edit": "無法將編輯套用到文件",
+		"failed_activate_diff_editor": "無法啟動差異編輯器：{{error}}",
+		"failed_execute_diff_command": "無法執行差異指令：{{error}}"
 	},
 	"warnings": {
 		"no_terminal_content": "沒有選擇終端機內容",
@@ -97,6 +102,11 @@
 	"input": {
 		"task_prompt": "讓 Roo 做什麼？",
 		"task_placeholder": "在這裡輸入工作"
+	},
+	"diff": {
+		"title_original_changes": "原始 ↔ Roo 的變更",
+		"title_new_file": "新檔案",
+		"title_editable": "（可編輯）"
 	},
 	"settings": {
 		"providers": {

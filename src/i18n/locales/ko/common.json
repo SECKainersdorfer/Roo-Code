@@ -59,7 +59,12 @@
 		"condense_not_enough_messages": "컨텍스트를 압축할 메시지가 충분하지 않습니다",
 		"condensed_recently": "컨텍스트가 최근 압축되었습니다; 이 시도를 건너뜁니다",
 		"condense_handler_invalid": "컨텍스트 압축을 위한 API 핸들러가 유효하지 않습니다",
-		"condense_context_grew": "압축 중 컨텍스트 크기가 증가했습니다; 이 시도를 건너뜁니다"
+		"condense_context_grew": "압축 중 컨텍스트 크기가 증가했습니다; 이 시도를 건너뜁니다",
+		"diff_editor_timeout": "차이점 편집기 열기 대기 중 시간 초과",
+		"user_closed_editor": "텍스트 편집기를 닫았습니다. 파일을 편집할 수 없습니다",
+		"failed_apply_edit": "문서에 편집 내용을 적용하지 못했습니다",
+		"failed_activate_diff_editor": "차이점 편집기를 활성화하지 못했습니다: {{error}}",
+		"failed_execute_diff_command": "차이점 명령을 실행하지 못했습니다: {{error}}"
 	},
 	"warnings": {
 		"no_terminal_content": "선택된 터미널 내용이 없습니다",
@@ -97,6 +102,11 @@
 	"input": {
 		"task_prompt": "Roo에게 무엇을 시킬까요?",
 		"task_placeholder": "여기에 작업을 입력하세요"
+	},
+	"diff": {
+		"title_original_changes": "원본 ↔ Roo의 변경사항",
+		"title_new_file": "새 파일",
+		"title_editable": "(편집 가능)"
 	},
 	"settings": {
 		"providers": {

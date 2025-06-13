@@ -59,7 +59,12 @@
 		"condense_not_enough_messages": "Niet genoeg berichten om context te comprimeren",
 		"condensed_recently": "Context is recent gecomprimeerd; deze poging wordt overgeslagen",
 		"condense_handler_invalid": "API-handler voor het comprimeren van context is ongeldig",
-		"condense_context_grew": "Contextgrootte nam toe tijdens comprimeren; deze poging wordt overgeslagen"
+		"condense_context_grew": "Contextgrootte nam toe tijdens comprimeren; deze poging wordt overgeslagen",
+		"diff_editor_timeout": "Time-out tijdens wachten op openen van diff-editor",
+		"user_closed_editor": "Je hebt de teksteditor gesloten, kan bestand niet bewerken",
+		"failed_apply_edit": "Kan bewerking niet toepassen op document",
+		"failed_activate_diff_editor": "Kan diff-editor niet activeren: {{error}}",
+		"failed_execute_diff_command": "Kan diff-commando niet uitvoeren: {{error}}"
 	},
 	"warnings": {
 		"no_terminal_content": "Geen terminalinhoud geselecteerd",
@@ -97,5 +102,10 @@
 	"input": {
 		"task_prompt": "Wat moet Roo doen?",
 		"task_placeholder": "Typ hier je taak"
+	},
+	"diff": {
+		"title_original_changes": "Origineel ↔ Roo's Wijzigingen",
+		"title_new_file": "Nieuw Bestand",
+		"title_editable": "(Bewerkbaar)"
 	}
 }

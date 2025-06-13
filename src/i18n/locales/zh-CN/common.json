@@ -59,7 +59,12 @@
 		"condense_not_enough_messages": "没有足够的对话来压缩上下文",
 		"condensed_recently": "上下文最近已压缩；跳过此次尝试",
 		"condense_handler_invalid": "压缩上下文的API处理程序无效",
-		"condense_context_grew": "压缩过程中上下文大小增加；跳过此次尝试"
+		"condense_context_grew": "压缩过程中上下文大小增加；跳过此次尝试",
+		"diff_editor_timeout": "等待差异编辑器打开超时",
+		"user_closed_editor": "你关闭了文本编辑器，无法编辑文件",
+		"failed_apply_edit": "无法将编辑应用到文档",
+		"failed_activate_diff_editor": "无法激活差异编辑器：{{error}}",
+		"failed_execute_diff_command": "无法执行差异命令：{{error}}"
 	},
 	"warnings": {
 		"no_terminal_content": "没有选择终端内容",
@@ -97,6 +102,11 @@
 	"input": {
 		"task_prompt": "让Roo做什么？",
 		"task_placeholder": "在这里输入任务"
+	},
+	"diff": {
+		"title_original_changes": "原始 ↔ Roo的更改",
+		"title_new_file": "新文件",
+		"title_editable": "(可编辑)"
 	},
 	"settings": {
 		"providers": {

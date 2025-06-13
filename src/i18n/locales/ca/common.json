@@ -63,7 +63,12 @@
 		"condense_not_enough_messages": "No hi ha prou missatges per condensar el context",
 		"condensed_recently": "El context s'ha condensat recentment; s'omet aquest intent",
 		"condense_handler_invalid": "El gestor de l'API per condensar el context no és vàlid",
-		"condense_context_grew": "La mida del context ha augmentat durant la condensació; s'omet aquest intent"
+		"condense_context_grew": "La mida del context ha augmentat durant la condensació; s'omet aquest intent",
+		"diff_editor_timeout": "Temps d'espera esgotat esperant que s'obri l'editor de diferències",
+		"user_closed_editor": "Has tancat l'editor de text, no es pot editar el fitxer",
+		"failed_apply_edit": "No s'ha pogut aplicar l'edició al document",
+		"failed_activate_diff_editor": "No s'ha pogut activar l'editor de diferències: {{error}}",
+		"failed_execute_diff_command": "No s'ha pogut executar la comanda de diferències: {{error}}"
 	},
 	"warnings": {
 		"no_terminal_content": "No s'ha seleccionat contingut de terminal",
@@ -103,5 +108,10 @@
 			"groqApiKey": "Clau API de Groq",
 			"getGroqApiKey": "Obté la clau API de Groq"
 		}
+	},
+	"diff": {
+		"title_original_changes": "Original ↔ Canvis de Roo",
+		"title_new_file": "Fitxer Nou",
+		"title_editable": "(Editable)"
 	}
 }

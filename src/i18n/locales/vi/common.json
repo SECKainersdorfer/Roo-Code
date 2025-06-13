@@ -59,7 +59,12 @@
 		"condense_not_enough_messages": "Không đủ tin nhắn để nén ngữ cảnh",
 		"condensed_recently": "Ngữ cảnh đã được nén gần đây; bỏ qua lần thử này",
 		"condense_handler_invalid": "Trình xử lý API để nén ngữ cảnh không hợp lệ",
-		"condense_context_grew": "Kích thước ngữ cảnh tăng lên trong quá trình nén; bỏ qua lần thử này"
+		"condense_context_grew": "Kích thước ngữ cảnh tăng lên trong quá trình nén; bỏ qua lần thử này",
+		"diff_editor_timeout": "Hết thời gian chờ trình chỉnh sửa diff mở",
+		"user_closed_editor": "Bạn đã đóng trình chỉnh sửa văn bản, không thể chỉnh sửa tệp",
+		"failed_apply_edit": "Không thể áp dụng chỉnh sửa vào tài liệu",
+		"failed_activate_diff_editor": "Không thể kích hoạt trình chỉnh sửa diff: {{error}}",
+		"failed_execute_diff_command": "Không thể thực thi lệnh diff: {{error}}"
 	},
 	"warnings": {
 		"no_terminal_content": "Không có nội dung terminal được chọn",
@@ -97,6 +102,11 @@
 	"input": {
 		"task_prompt": "Bạn muốn Roo làm gì?",
 		"task_placeholder": "Nhập nhiệm vụ của bạn ở đây"
+	},
+	"diff": {
+		"title_original_changes": "Gốc ↔ Thay đổi của Roo",
+		"title_new_file": "Tệp Mới",
+		"title_editable": "(Có thể chỉnh sửa)"
 	},
 	"settings": {
 		"providers": {

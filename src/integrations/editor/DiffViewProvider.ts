@@ -11,6 +11,7 @@ import { formatResponse } from "../../core/prompts/responses"
 import { diagnosticsToProblemsString, getNewDiagnostics } from "../diagnostics"
 import { ClineSayTool } from "../../shared/ExtensionMessage"
 import { Task } from "../../core/task/Task"
+import { t } from "../../i18n"
 
 import { DecorationController } from "./DecorationController"
 
@@ -117,63 +118,74 @@ export class DiffViewProvider {
 		const document = diffEditor?.document
 
 		if (!diffEditor || !document) {
-			throw new Error("User closed text editor, unable to edit file...")
+			throw new Error(t("errors.user_closed_editor"))
 		}
 
-		// Place cursor at the beginning of the diff editor to keep it out of
-		// the way of the stream animation.
-		const beginningOfDocument = new vscode.Position(0, 0)
-		diffEditor.selection = new vscode.Selection(beginningOfDocument, beginningOfDocument)
+		try {
+			// Place cursor at the beginning of the diff editor to keep it out of
+			// the way of the stream animation.
+			const beginningOfDocument = new vscode.Position(0, 0)
+			diffEditor.selection = new vscode.Selection(beginningOfDocument, beginningOfDocument)
 
-		const endLine = accumulatedLines.length
-		// Replace all content up to the current line with accumulated lines.
-		const edit = new vscode.WorkspaceEdit()
-		const rangeToReplace = new vscode.Range(0, 0, endLine, 0)
-		const contentToReplace = accumulatedLines.slice(0, endLine + 1).join("\n") + "\n"
-		edit.replace(document.uri, rangeToReplace, this.stripAllBOMs(contentToReplace))
-		await vscode.workspace.applyEdit(edit)
-		// Update decorations.
-		this.activeLineController.setActiveLine(endLine)
-		this.fadedOverlayController.updateOverlayAfterLine(endLine, document.lineCount)
-		// Scroll to the current line.
-		const ranges = this.activeDiffEditor?.visibleRanges
-		if (ranges && ranges.length > 0 && ranges[0].start.line < endLine && ranges[0].end.line > endLine) {
-			this.scrollEditorToLine(endLine)
-		}
+			const endLine = Math.max(0, accumulatedLines.length - 1)
+			// Replace all content up to the current line with accumulated lines.
+			const edit = new vscode.WorkspaceEdit()
+			const rangeToReplace = new vscode.Range(0, 0, endLine, 0)
+			const contentToReplace = accumulatedLines.slice(0, endLine + 1).join("\n") + "\n"
+			edit.replace(document.uri, rangeToReplace, this.stripAllBOMs(contentToReplace))
 
-		// Update the streamedLines with the new accumulated content.
-		this.streamedLines = accumulatedLines
+			const editApplied = await vscode.workspace.applyEdit(edit)
+			if (!editApplied) {
+				console.error("Failed to apply edit in DiffViewProvider.update")
+				throw new Error(t("errors.failed_apply_edit"))
+			}
+			// Update decorations.
+			this.activeLineController.setActiveLine(endLine)
+			this.fadedOverlayController.updateOverlayAfterLine(endLine, document.lineCount)
 
-		if (isFinal) {
-			// Handle any remaining lines if the new content is shorter than the
-			// original.
-			if (this.streamedLines.length < document.lineCount) {
-				const edit = new vscode.WorkspaceEdit()
-				edit.delete(document.uri, new vscode.Range(this.streamedLines.length, 0, document.lineCount, 0))
-				await vscode.workspace.applyEdit(edit)
+			// Scroll to the current line.
+			const ranges = this.activeDiffEditor?.visibleRanges
+			if (ranges && ranges.length > 0 && ranges[0].start.line < endLine && ranges[0].end.line > endLine) {
+				this.scrollEditorToLine(endLine)
 			}
 
-			// Preserve empty last line if original content had one.
-			const hasEmptyLastLine = this.originalContent?.endsWith("\n")
+			// Update the streamedLines with the new accumulated content.
+			this.streamedLines = accumulatedLines
 
-			if (hasEmptyLastLine && !accumulatedContent.endsWith("\n")) {
-				accumulatedContent += "\n"
+			if (isFinal) {
+				// Handle any remaining lines if the new content is shorter than the
+				// original.
+				if (this.streamedLines.length < document.lineCount) {
+					const edit = new vscode.WorkspaceEdit()
+					edit.delete(document.uri, new vscode.Range(this.streamedLines.length, 0, document.lineCount, 0))
+					await vscode.workspace.applyEdit(edit)
+				}
+
+				// Preserve empty last line if original content had one.
+				const hasEmptyLastLine = this.originalContent?.endsWith("\n")
+
+				if (hasEmptyLastLine && !accumulatedContent.endsWith("\n")) {
+					accumulatedContent += "\n"
+				}
+
+				// Apply the final content.
+				const finalEdit = new vscode.WorkspaceEdit()
+
+				finalEdit.replace(
+					document.uri,
+					new vscode.Range(0, 0, document.lineCount, 0),
+					this.stripAllBOMs(accumulatedContent),
+				)
+
+				await vscode.workspace.applyEdit(finalEdit)
+
+				// Clear all decorations at the end (after applying final edit).
+				this.fadedOverlayController.clear()
+				this.activeLineController.clear()
 			}
-
-			// Apply the final content.
-			const finalEdit = new vscode.WorkspaceEdit()
-
-			finalEdit.replace(
-				document.uri,
-				new vscode.Range(0, 0, document.lineCount, 0),
-				this.stripAllBOMs(accumulatedContent),
-			)
-
-			await vscode.workspace.applyEdit(finalEdit)
-
-			// Clear all decorations at the end (after applying final edit).
-			this.fadedOverlayController.clear()
-			this.activeLineController.clear()
+		} catch (err) {
+			console.error("Error in DiffViewProvider.update:", err)
+			throw err
 		}
 	}
 
@@ -382,7 +394,7 @@ export class DiffViewProvider {
 	}
 
 	private async closeAllDiffViews(): Promise<void> {
-		const closeOps = vscode.window.tabGroups.all
+		const diffTabs = vscode.window.tabGroups.all
 			.flatMap((group) => group.tabs)
 			.filter(
 				(tab) =>
@@ -390,14 +402,20 @@ export class DiffViewProvider {
 					tab.input.original.scheme === DIFF_VIEW_URI_SCHEME &&
 					!tab.isDirty,
 			)
-			.map((tab) =>
-				vscode.window.tabGroups.close(tab).then(
-					() => undefined,
-					(err) => {
-						// Ignore errors when closing diff tabs - they may already be closed
-					},
-				),
-			)
+
+		if (diffTabs.length === 0) {
+			return // No diff tabs to close
+		}
+
+		const closeOps = diffTabs.map((tab) =>
+			vscode.window.tabGroups.close(tab).then(
+				() => undefined,
+				(err) => {
+					// Log errors for debugging, but don't fail the operation
+					console.error(`Failed to close diff tab: ${err instanceof Error ? err.message : String(err)}`)
+				},
+			),
+		)
 
 		await Promise.all(closeOps)
 	}
@@ -427,13 +445,47 @@ export class DiffViewProvider {
 		}
 
 		// Open new diff editor.
-		return new Promise<vscode.TextEditor>((resolve, reject) => {
-			;(async () => {
-				const fileName = path.basename(uri.fsPath)
-				const fileExists = this.editType === "modify"
-				let timeoutId: NodeJS.Timeout | undefined
+		const fileName = path.basename(uri.fsPath)
+		const fileExists = this.editType === "modify"
 
-				const checkAndResolve = () => {
+		// Track cleanup operations
+		const cleanupOperations: (() => void)[] = []
+		let isResolved = false
+
+		// Helper to perform cleanup
+		const cleanup = () => {
+			cleanupOperations.forEach((op) => op())
+			cleanupOperations.length = 0
+		}
+
+		// Helper to resolve once
+		const resolveOnce = (editor: vscode.TextEditor, resolver: (editor: vscode.TextEditor) => void) => {
+			if (!isResolved) {
+				isResolved = true
+				cleanup()
+				resolver(editor)
+			}
+		}
+
+		// Helper to reject once
+		const rejectOnce = (error: Error, rejecter: (error: Error) => void) => {
+			if (!isResolved) {
+				isResolved = true
+				cleanup()
+				rejecter(error)
+			}
+		}
+
+		return new Promise<vscode.TextEditor>((resolve, reject) => {
+			// Set up timeout for multi-monitor scenarios
+			const timeoutId = setTimeout(() => {
+				rejectOnce(new Error(t("errors.diff_editor_timeout")), reject)
+			}, 10_000)
+			cleanupOperations.push(() => clearTimeout(timeoutId))
+
+			// Helper to find and activate diff editor
+			const findAndActivateDiffEditor = async (): Promise<vscode.TextEditor | null> => {
+				try {
 					for (const group of vscode.window.tabGroups.all) {
 						for (const tab of group.tabs) {
 							if (
@@ -441,84 +493,101 @@ export class DiffViewProvider {
 								tab.input?.original?.scheme === DIFF_VIEW_URI_SCHEME &&
 								arePathsEqual(tab.input.modified.fsPath, uri.fsPath)
 							) {
-								// Found the diff editor, now try to show it to get the TextEditor instance
-								vscode.window.showTextDocument(tab.input.modified, { preserveFocus: true }).then(
-									(editor) => {
-										if (timeoutId) clearTimeout(timeoutId)
-										disposableTabGroup.dispose()
-										resolve(editor)
-									},
-									(err) => {
-										if (timeoutId) clearTimeout(timeoutId)
-										disposableTabGroup.dispose()
-										reject(
-											new Error(`Failed to show diff editor after finding tab: ${err.message}`),
-										)
-									},
-								)
-								return true
+								// Found the diff editor tab
+								try {
+									const editor = await vscode.window.showTextDocument(tab.input.modified, {
+										preserveFocus: true,
+									})
+									return editor
+								} catch (err) {
+									console.error("Failed to show diff editor after finding tab:", err)
+									throw new Error(
+										t("errors.failed_activate_diff_editor", {
+											error: err instanceof Error ? err.message : String(err),
+										}),
+									)
+								}
 							}
 						}
 					}
-					return false
+					return null
+				} catch (err) {
+					console.error("Error while searching for diff editor:", err)
+					return null
 				}
+			}
 
-				// Listen for changes in tab groups, which includes tabs moving between windows
-				const disposableTabGroup = vscode.window.tabGroups.onDidChangeTabGroups(() => {
-					const found = checkAndResolve()
-					if (found) {
-						// Editor found and resolved, no need to continue listening
-						console.debug("Diff editor found via tab group change listener")
+			// Listen for tab group changes (handles multi-window scenarios)
+			const disposableTabGroup = vscode.window.tabGroups.onDidChangeTabGroups(async () => {
+				const editor = await findAndActivateDiffEditor()
+				if (editor) {
+					resolveOnce(editor, resolve)
+				}
+			})
+			cleanupOperations.push(() => disposableTabGroup.dispose())
+
+			// Also listen for active editor changes as a fallback
+			const disposableEditor = vscode.window.onDidChangeActiveTextEditor(async (editor) => {
+				if (editor && arePathsEqual(editor.document.uri.fsPath, uri.fsPath)) {
+					// Double-check this is actually a diff editor
+					const isDiffEditor = await findAndActivateDiffEditor()
+					if (isDiffEditor) {
+						resolveOnce(isDiffEditor, resolve)
 					}
-				})
+				}
+			})
+			cleanupOperations.push(() => disposableEditor.dispose())
 
-				vscode.commands
-					.executeCommand(
-						"vscode.diff",
-						vscode.Uri.parse(`${DIFF_VIEW_URI_SCHEME}:${fileName}`).with({
-							query: Buffer.from(this.originalContent ?? "").toString("base64"),
-						}),
-						uri,
-						`${fileName}: ${fileExists ? "Original ↔ Roo's Changes" : "New File"} (Editable)`,
-						{ preserveFocus: true },
-					)
-					.then(
-						() => {
-							// Give a brief moment for the editor to appear in tab groups
-							setTimeout(() => {
-								const found = checkAndResolve()
-								if (!found) {
-									// If not found immediately, rely on tab group change listener
-									// and the 10-second timeout fallback to handle resolution
-									console.debug(
-										"Diff editor not found in initial check, waiting for tab group changes...",
-									)
-								}
-							}, 100)
-						},
-						(err) => {
-							if (timeoutId) clearTimeout(timeoutId)
-							disposableTabGroup.dispose()
-							reject(new Error(`Failed to open diff editor command: ${err.message}`))
-						},
-					)
-
-				timeoutId = setTimeout(() => {
-					disposableTabGroup.dispose()
-					reject(new Error("Failed to open diff editor, please try again..."))
-				}, 10_000)
-			})()
+			// Execute the diff command
+			vscode.commands
+				.executeCommand(
+					"vscode.diff",
+					vscode.Uri.parse(`${DIFF_VIEW_URI_SCHEME}:${fileName}`).with({
+						query: Buffer.from(this.originalContent ?? "").toString("base64"),
+					}),
+					uri,
+					`${fileName}: ${fileExists ? t("diff.title_original_changes") : t("diff.title_new_file")} ${t("diff.title_editable")}`,
+					{ preserveFocus: true },
+				)
+				.then(
+					async () => {
+						// Check immediately if the editor is already available
+						const editor = await findAndActivateDiffEditor()
+						if (editor) {
+							resolveOnce(editor, resolve)
+							return
+						}
+					},
+					(err) => {
+						rejectOnce(
+							new Error(
+								t("errors.failed_execute_diff_command", {
+									error: err instanceof Error ? err.message : String(err),
+								}),
+							),
+							reject,
+						)
+					},
+				)
 		})
 	}
 
 	private scrollEditorToLine(line: number) {
-		if (this.activeDiffEditor) {
-			const scrollLine = line + 4
+		if (!this.activeDiffEditor) {
+			return
+		}
+
+		try {
+			const scrollLine = Math.max(0, line + 4)
+			const maxLine = this.activeDiffEditor.document.lineCount - 1
+			const targetLine = Math.min(scrollLine, maxLine)
 
 			this.activeDiffEditor.revealRange(
-				new vscode.Range(scrollLine, 0, scrollLine, 0),
+				new vscode.Range(targetLine, 0, targetLine, 0),
 				vscode.TextEditorRevealType.InCenter,
 			)
+		} catch (err) {
+			console.error("Error scrolling editor to line:", err)
 		}
 	}
 
@@ -527,25 +596,30 @@ export class DiffViewProvider {
 			return
 		}
 
-		const currentContent = this.activeDiffEditor.document.getText()
-		const diffs = diff.diffLines(this.originalContent || "", currentContent)
+		try {
+			const currentContent = this.activeDiffEditor.document.getText()
+			const diffs = diff.diffLines(this.originalContent || "", currentContent)
 
-		let lineCount = 0
+			let lineCount = 0
 
-		for (const part of diffs) {
-			if (part.added || part.removed) {
-				// Found the first diff, scroll to it.
-				this.activeDiffEditor.revealRange(
-					new vscode.Range(lineCount, 0, lineCount, 0),
-					vscode.TextEditorRevealType.InCenter,
-				)
+			for (const part of diffs) {
+				if (part.added || part.removed) {
+					// Found the first diff, scroll to it.
+					const targetLine = Math.max(0, lineCount)
+					this.activeDiffEditor.revealRange(
+						new vscode.Range(targetLine, 0, targetLine, 0),
+						vscode.TextEditorRevealType.InCenter,
+					)
 
-				return
+					return
+				}
+
+				if (!part.removed) {
+					lineCount += part.count || 0
+				}
 			}
-
-			if (!part.removed) {
-				lineCount += part.count || 0
-			}
+		} catch (err) {
+			console.error("Error in scrollToFirstDiff:", err)
 		}
 	}
 

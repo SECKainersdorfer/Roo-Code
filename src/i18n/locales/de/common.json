@@ -59,7 +59,12 @@
 		"condense_not_enough_messages": "Nicht genügend Nachrichten zum Verdichten des Kontexts",
 		"condensed_recently": "Kontext wurde kürzlich verdichtet; dieser Versuch wird übersprungen",
 		"condense_handler_invalid": "API-Handler zum Verdichten des Kontexts ist ungültig",
-		"condense_context_grew": "Kontextgröße ist während der Verdichtung gewachsen; dieser Versuch wird übersprungen"
+		"condense_context_grew": "Kontextgröße ist während der Verdichtung gewachsen; dieser Versuch wird übersprungen",
+		"diff_editor_timeout": "Zeitüberschreitung beim Warten auf das Öffnen des Diff-Editors",
+		"user_closed_editor": "Du hast den Texteditor geschlossen, Datei kann nicht bearbeitet werden",
+		"failed_apply_edit": "Bearbeitung konnte nicht angewendet werden",
+		"failed_activate_diff_editor": "Diff-Editor konnte nicht aktiviert werden: {{error}}",
+		"failed_execute_diff_command": "Diff-Befehl konnte nicht ausgeführt werden: {{error}}"
 	},
 	"warnings": {
 		"no_terminal_content": "Kein Terminal-Inhalt ausgewählt",
@@ -97,6 +102,11 @@
 	"input": {
 		"task_prompt": "Was soll Roo tun?",
 		"task_placeholder": "Gib deine Aufgabe hier ein"
+	},
+	"diff": {
+		"title_original_changes": "Original ↔ Roos Änderungen",
+		"title_new_file": "Neue Datei",
+		"title_editable": "(Bearbeitbar)"
 	},
 	"settings": {
 		"providers": {

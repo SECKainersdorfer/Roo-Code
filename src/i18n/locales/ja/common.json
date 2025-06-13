@@ -59,7 +59,12 @@
 		"condense_not_enough_messages": "コンテキストを圧縮するのに十分なメッセージがありません",
 		"condensed_recently": "コンテキストは最近圧縮されました；この試行をスキップします",
 		"condense_handler_invalid": "コンテキストを圧縮するためのAPIハンドラーが無効です",
-		"condense_context_grew": "圧縮中にコンテキストサイズが増加しました；この試行をスキップします"
+		"condense_context_grew": "圧縮中にコンテキストサイズが増加しました；この試行をスキップします",
+		"diff_editor_timeout": "差分エディターの開始を待機中にタイムアウトしました",
+		"user_closed_editor": "テキストエディターを閉じました。ファイルを編集できません",
+		"failed_apply_edit": "ドキュメントへの編集の適用に失敗しました",
+		"failed_activate_diff_editor": "差分エディターのアクティベートに失敗しました：{{error}}",
+		"failed_execute_diff_command": "差分コマンドの実行に失敗しました：{{error}}"
 	},
 	"warnings": {
 		"no_terminal_content": "選択されたターミナルコンテンツがありません",
@@ -97,6 +102,11 @@
 	"input": {
 		"task_prompt": "Rooにどんなことをさせますか？",
 		"task_placeholder": "タスクをここに入力してください"
+	},
+	"diff": {
+		"title_original_changes": "オリジナル ↔ Rooの変更",
+		"title_new_file": "新しいファイル",
+		"title_editable": "（編集可能）"
 	},
 	"settings": {
 		"providers": {

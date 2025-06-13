@@ -59,7 +59,12 @@
 		"condense_not_enough_messages": "Non ci sono abbastanza messaggi per condensare il contesto",
 		"condensed_recently": "Il contesto è stato condensato di recente; questo tentativo viene saltato",
 		"condense_handler_invalid": "Il gestore API per condensare il contesto non è valido",
-		"condense_context_grew": "La dimensione del contesto è aumentata durante la condensazione; questo tentativo viene saltato"
+		"condense_context_grew": "La dimensione del contesto è aumentata durante la condensazione; questo tentativo viene saltato",
+		"diff_editor_timeout": "Timeout in attesa dell'apertura dell'editor delle differenze",
+		"user_closed_editor": "Hai chiuso l'editor di testo, impossibile modificare il file",
+		"failed_apply_edit": "Impossibile applicare la modifica al documento",
+		"failed_activate_diff_editor": "Impossibile attivare l'editor delle differenze: {{error}}",
+		"failed_execute_diff_command": "Impossibile eseguire il comando delle differenze: {{error}}"
 	},
 	"warnings": {
 		"no_terminal_content": "Nessun contenuto del terminale selezionato",
@@ -97,6 +102,11 @@
 	"input": {
 		"task_prompt": "Cosa deve fare Roo?",
 		"task_placeholder": "Scrivi il tuo compito qui"
+	},
+	"diff": {
+		"title_original_changes": "Originale ↔ Modifiche di Roo",
+		"title_new_file": "Nuovo File",
+		"title_editable": "(Modificabile)"
 	},
 	"settings": {
 		"providers": {

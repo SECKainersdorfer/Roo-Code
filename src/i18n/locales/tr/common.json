@@ -59,7 +59,12 @@
 		"condense_not_enough_messages": "Bağlamı sıkıştırmak için yeterli mesaj yok",
 		"condensed_recently": "Bağlam yakın zamanda sıkıştırıldı; bu deneme atlanıyor",
 		"condense_handler_invalid": "Bağlamı sıkıştırmak için API işleyicisi geçersiz",
-		"condense_context_grew": "Sıkıştırma sırasında bağlam boyutu arttı; bu deneme atlanıyor"
+		"condense_context_grew": "Sıkıştırma sırasında bağlam boyutu arttı; bu deneme atlanıyor",
+		"diff_editor_timeout": "Fark editörünün açılması beklenirken zaman aşımı",
+		"user_closed_editor": "Metin editörünü kapattın, dosya düzenlenemiyor",
+		"failed_apply_edit": "Düzenleme belgeye uygulanamadı",
+		"failed_activate_diff_editor": "Fark editörü etkinleştirilemedi: {{error}}",
+		"failed_execute_diff_command": "Fark komutu çalıştırılamadı: {{error}}"
 	},
 	"warnings": {
 		"no_terminal_content": "Seçili terminal içeriği yok",
@@ -97,6 +102,11 @@
 	"input": {
 		"task_prompt": "Roo ne yapsın?",
 		"task_placeholder": "Görevini buraya yaz"
+	},
+	"diff": {
+		"title_original_changes": "Orijinal ↔ Roo'nun Değişiklikleri",
+		"title_new_file": "Yeni Dosya",
+		"title_editable": "(Düzenlenebilir)"
 	},
 	"settings": {
 		"providers": {

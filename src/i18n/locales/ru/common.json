@@ -59,7 +59,12 @@
 		"condense_not_enough_messages": "Недостаточно сообщений для сжатия контекста",
 		"condensed_recently": "Контекст был недавно сжат; пропускаем эту попытку",
 		"condense_handler_invalid": "Обработчик API для сжатия контекста недействителен",
-		"condense_context_grew": "Размер контекста увеличился во время сжатия; пропускаем эту попытку"
+		"condense_context_grew": "Размер контекста увеличился во время сжатия; пропускаем эту попытку",
+		"diff_editor_timeout": "Превышено время ожидания открытия редактора различий",
+		"user_closed_editor": "Вы закрыли текстовый редактор, невозможно редактировать файл",
+		"failed_apply_edit": "Не удалось применить изменения к документу",
+		"failed_activate_diff_editor": "Не удалось активировать редактор различий: {{error}}",
+		"failed_execute_diff_command": "Не удалось выполнить команду различий: {{error}}"
 	},
 	"warnings": {
 		"no_terminal_content": "Не выбрано содержимое терминала",
@@ -97,6 +102,11 @@
 	"input": {
 		"task_prompt": "Что должен сделать Roo?",
 		"task_placeholder": "Введите вашу задачу здесь"
+	},
+	"diff": {
+		"title_original_changes": "Оригинал ↔ Изменения Roo",
+		"title_new_file": "Новый Файл",
+		"title_editable": "(Редактируемый)"
 	},
 	"settings": {
 		"providers": {

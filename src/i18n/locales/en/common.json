@@ -59,7 +59,12 @@
 		"condense_not_enough_messages": "Not enough messages to condense context",
 		"condensed_recently": "Context was condensed recently; skipping this attempt",
 		"condense_handler_invalid": "API handler for condensing context is invalid",
-		"condense_context_grew": "Context size increased during condensing; skipping this attempt"
+		"condense_context_grew": "Context size increased during condensing; skipping this attempt",
+		"diff_editor_timeout": "Timed out waiting for diff editor to open",
+		"user_closed_editor": "User closed text editor, unable to edit file",
+		"failed_apply_edit": "Failed to apply edit to document",
+		"failed_activate_diff_editor": "Failed to activate diff editor: {{error}}",
+		"failed_execute_diff_command": "Failed to execute diff command: {{error}}"
 	},
 	"warnings": {
 		"no_terminal_content": "No terminal content selected",
@@ -97,5 +102,10 @@
 	"input": {
 		"task_prompt": "What should Roo do?",
 		"task_placeholder": "Type your task here"
+	},
+	"diff": {
+		"title_original_changes": "Original ↔ Roo's Changes",
+		"title_new_file": "New File",
+		"title_editable": "(Editable)"
 	}
 }

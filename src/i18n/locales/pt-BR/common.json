@@ -63,7 +63,12 @@
 		"condense_not_enough_messages": "Não há mensagens suficientes para condensar o contexto",
 		"condensed_recently": "O contexto foi condensado recentemente; pulando esta tentativa",
 		"condense_handler_invalid": "O manipulador de API para condensar o contexto é inválido",
-		"condense_context_grew": "O tamanho do contexto aumentou durante a condensação; pulando esta tentativa"
+		"condense_context_grew": "O tamanho do contexto aumentou durante a condensação; pulando esta tentativa",
+		"diff_editor_timeout": "Tempo limite esgotado aguardando o editor de diferenças abrir",
+		"user_closed_editor": "Você fechou o editor de texto, não é possível editar o arquivo",
+		"failed_apply_edit": "Falha ao aplicar edição ao documento",
+		"failed_activate_diff_editor": "Falha ao ativar editor de diferenças: {{error}}",
+		"failed_execute_diff_command": "Falha ao executar comando de diferenças: {{error}}"
 	},
 	"warnings": {
 		"no_terminal_content": "Nenhum conteúdo do terminal selecionado",
@@ -103,5 +108,10 @@
 			"groqApiKey": "Chave de API Groq",
 			"getGroqApiKey": "Obter chave de API Groq"
 		}
+	},
+	"diff": {
+		"title_original_changes": "Original ↔ Alterações do Roo",
+		"title_new_file": "Novo Arquivo",
+		"title_editable": "(Editável)"
 	}
 }
